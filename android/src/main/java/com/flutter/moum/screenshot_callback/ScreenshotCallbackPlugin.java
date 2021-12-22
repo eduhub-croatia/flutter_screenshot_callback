@@ -1,5 +1,6 @@
 package com.flutter.moum.screenshot_callback;
 
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -13,11 +14,13 @@ import android.os.Handler;
 import android.os.Looper;
 //import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
 
-public class ScreenshotCallbackPlugin implements MethodCallHandler {
+public class ScreenshotCallbackPlugin implements MethodCallHandler, FlutterPlugin {
     private static MethodChannel channel;
 
     private Handler handler;
@@ -25,13 +28,13 @@ public class ScreenshotCallbackPlugin implements MethodCallHandler {
     private String TAG = "tag";
 
 
-    public static void registerWith(Registrar registrar) {
+    public static void registerWith(@NonNull Registrar registrar) {
         channel = new MethodChannel(registrar.messenger(), "flutter.moum/screenshot_callback");
         channel.setMethodCallHandler(new ScreenshotCallbackPlugin());
     }
 
     @Override
-    public void onMethodCall(MethodCall call, Result result) {
+    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         //Log.d(TAG, "onMethodCall: ");
 
         if (call.method.equals("initialize")) {
@@ -86,5 +89,16 @@ public class ScreenshotCallbackPlugin implements MethodCallHandler {
         } else {
             result.notImplemented();
         }
+    }
+
+    @Override
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter.moum/screenshot_callback");
+        channel.setMethodCallHandler(this);
+    }
+
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+
     }
 }
