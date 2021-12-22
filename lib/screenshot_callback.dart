@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +16,7 @@ class ScreenshotCallback {
   /// callback is added.
   ///
   /// Defaults to `true`.
-   bool? requestPermissions;
+  bool? requestPermissions;
 
   ScreenshotCallback({this.requestPermissions}) {
     requestPermissions ??= true;
@@ -33,9 +33,9 @@ class ScreenshotCallback {
   }
 
   /// Add void callback.
-  void addListener(VoidCallback callback) {
+  void addListener(VoidCallback? callback) {
     assert(callback != null, 'A non-null callback must be provided.');
-    onCallbacks.add(callback);
+    onCallbacks.add(callback!);
   }
 
   Future<dynamic> _handleMethod(MethodCall call) async {
